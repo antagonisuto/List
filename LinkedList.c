@@ -1,6 +1,7 @@
 /***************************************************************************************************************************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
 
 /*-------------------------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -105,19 +106,58 @@ static void setFunctionPointers ( List list )
 
 
 
+/* Constructs an empty list.
+   Returns the created list, or NULL if running out of memory. 
+   
+   
+typedef struct node
+{
+  ListElement   element ;
+  struct node * next    ;
+}
+Node ;
+
+typedef struct linkedList
+{
+  int    numberOfElements ;
+  Node * pHead            ;
+  Node * pTail            ;
+}
+LinkedList ;*/
 
 /***************************************************************************************************************************************************/
 
 List createLinkedList ( void )
 {
-  return 0;
+    LinkedList *newLinkedList = malloc(sizeof(LinkedList));
+    if(newLinkedList == NULL){
+        return NULL;
+    }
+
+    newLinkedList->numberOfElements = 0;
+    newLinkedList->pHead = malloc(sizeof(struct node));
+    newLinkedList->pTail = malloc(sizeof(struct node));
+
+    if(newLinkedList->pTail || newLinkedList->pHead){
+        return NULL;
+    }
+
+    List lst = malloc(sizeof(struct list));
+    lst->pInternalList = newLinkedList;
+    setFunctionPointers(lst);
+
+    return lst;
 }
 
 /*=================================================================================================================================================*/
 
 List createLinkedListFrom ( List other )  /* 'other' list can be implemented using arrays or other underlying data structures */
 {
-  return 0;
+
+    List data = createLinkedList();
+    data = other;
+
+  return data;
 }
 
 /***************************************************************************************************************************************************/
@@ -126,10 +166,64 @@ List createLinkedListFrom ( List other )  /* 'other' list can be implemented usi
 
 
 /***************************************************************************************************************************************************/
+/* Inserts the specified element at the specified position in the list. Shifts the element currently at that position (if any) and any subsequent
+   elements to the right (adds one to their indices). If index is LIST_NA, then appends the specified element to the end of the list.
+   Returns True if the operation is successful.
+   Returns False if the operation is unsuccessful; for example if index < 0, or index > listSize(list), or running out of memory. */
 
 ListBoolean llAdd ( List list , ListElement element , int index )
 {
-  return False;
+
+    LinkedList *data = &ILL(list);
+    if(data == NULL){
+        return False;
+    }
+    
+    struct node *newNode = malloc(sizeof(struct node));
+    //newNode->next = malloc(sizeof(struct node));
+    newNode->element = element;
+    printf("%d", *(int *)newNode->element);
+
+    struct node *curr = malloc(sizeof(struct node));
+
+    if(index == LIST_NA){
+        curr = data->pTail;
+
+        while(curr->next!=NULL){
+            curr = curr->next;
+        }
+
+        struct node *temp = curr->next;
+        curr->next = newNode;
+        newNode->next = temp;
+        
+        data->pTail = curr;
+        data->numberOfElements++;
+        free(temp);
+        free(curr);
+        return True;
+    }
+
+    if(index < 0 || index > listSize(list)){
+        return False;
+    }
+
+    curr = data->pTail;
+
+    for(int i = 0; i<index; i++){
+        curr = curr->next;
+    }
+
+    struct node *temp = curr->next;
+    curr->next = newNode;
+    newNode->next = temp;
+
+    data->pTail = curr;
+    data->numberOfElements++;
+    free(temp);
+    free(curr);
+
+    return True;
 }
 
 /*=================================================================================================================================================*/
@@ -240,7 +334,11 @@ ListElement llSet ( List list , int index , ListElement element )
 
 int llSize ( List list )
 {
-  return False;
+    LinkedList *data = &ILL(list);
+
+    int size = data->numberOfElements;
+
+    return size;
 }
 
 /*=================================================================================================================================================*/
@@ -261,6 +359,13 @@ ListElement * llToArray ( List list )
 
 void llPrint ( List list , char * listName , ListElementPrintingFunction print )
 {
+    LinkedList data = ILL(list);
+
+    printf("LinkedList  : %s\n", listName);
+    printf("Elements    : %d\n", data.numberOfElements);
+    for(int i = 0; i<data.numberOfElements; i++){
+        printf("[%d] %d \n", i, *(int *) data.pTail->element);
+    }
 }
 
 /*=================================================================================================================================================*/

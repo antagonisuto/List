@@ -72,15 +72,18 @@ int main ( int argc , char * argv[] )
     listAdd( list1 , digits+4 , 0 ) ;
     listAdd( list1 , digits+8 , LIST_NA ) ;
     listAdd( list1 , digits+3 , LIST_NA ) ;
-
+    
     listPrint( list1 , "list1" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
 
-//   list2 = createLinkedListFrom( list1 ) ;
+    //printf("%d \n", listSize(list1));
 
-//   listAdd   ( list2 , digits+5 , 1       ) ;
+    list2 = createLinkedListFrom( list1 ) ;
+
+  listAdd   ( list2 , digits+5 , 1 ) ;
+    //listAdd   ( list2 , digits+6 , 2  ) ;
 //   listAddAll( list2 , list1    , LIST_NA ) ;
 
-//   listPrint( list2 , "list2" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
+  listPrint( list2 , "list2" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
 
 //   listSort( list2 , (ListElementComparisonFunction) compareInts ) ;
 

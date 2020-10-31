@@ -96,7 +96,7 @@ static void setFunctionPointers ( List list )
 
 
 /***************************************************************************************************************************************************/
-
+//DONE
 List createArrayList ( int initialCapacity )
 {
     if (initialCapacity == LIST_NA) {
@@ -118,7 +118,6 @@ List createArrayList ( int initialCapacity )
     newArrayList->array = malloc(initialCapacity * sizeof(int));
 
     if(newArrayList->array == NULL){
-        printf("maybe there");
         return NULL;
     }
     
@@ -130,11 +129,7 @@ List createArrayList ( int initialCapacity )
     lst->pInternalList = newArrayList;
     setFunctionPointers(lst);
   
-    printf("%d \n", initialCapacity);
-
-
     return lst;
-
 }
 
 /*=================================================================================================================================================*/
@@ -168,44 +163,30 @@ ListBoolean alEnsureCapacity(struct arrayList lst, int minCapacity){
    elements to the right (adds one to their indices). If index is LIST_NA, then appends the specified element to the end of the list.
    Returns True if the operation is successful.
    Returns False if the operation is unsuccessful; for example if index < 0, or index > listSize(list), or running out of memory. */
-
+//DONE
 ListBoolean alAdd ( List list , ListElement element , int index )
 {
-
     ArrayList *data = &IAL(list);
 
     if(index == LIST_NA){
         alEnsureCapacity(IAL(list), data->numberOfElements+1);
         data->array[data->numberOfElements] = element;
         data->numberOfElements++;
-        printf("2nd\n");
         return True;
     } 
 
     if(index < 0 || index > listSize(list)){
-        printf("3rd\n");
         return False;
     }
-
-    // if(data.arraySize < data.arraySize + sizeof(int)){
-    //     data.arraySize += (data.arraySize >> 1);
-    //     if(data.arraySize < data.arraySize + sizeof(int)){
-    //         data.arraySize = data.arraySize + sizeof(int);
-    //     }
-
-    //     data.array = realloc(data.array, data.arraySize * sizeof(data.array));
-    // }
 
      alEnsureCapacity(IAL(list), data->numberOfElements+1);
    
     for(int i = data->numberOfElements; i> index; i--){
-       printf("4th\n");
        data->array[i] = data->array[i-1];
     }
 
    data->array[index] = element;
    data->numberOfElements++;
-   printf("5th\n");
 
    return True;
 }
@@ -319,7 +300,11 @@ ListElement alSet ( List list , int index , ListElement element )
 
 int alSize ( List list )
 {
-  return False;
+    ArrayList *data = &IAL(list);
+
+    int size = data->numberOfElements;
+    
+    return size;
 }
 
 /*=================================================================================================================================================*/
