@@ -24,6 +24,7 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
+#include <stdlib.h>
 
 /***************************************************************************************************************************************************/
 
@@ -60,67 +61,67 @@ int main ( int argc , char * argv[] )
 {
   /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 
-  List list3 , list4 ;    /* Local lists */
+    List list3 , list4 ;    /* Local lists */
 
   /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 
-  printf( "\n" ) ;
+    printf( "\n" ) ;
 
-  list1 = createArrayList( LIST_NA ) ;
+    list1 = createArrayList( LIST_NA ) ;
 
-  listAdd( list1 , digits+4 , LIST_NA ) ;
-  listAdd( list1 , digits+8 , LIST_NA ) ;
-  listAdd( list1 , digits+3 , LIST_NA ) ;
+    listAdd( list1 , digits+4 , 0 ) ;
+    listAdd( list1 , digits+8 , LIST_NA ) ;
+    listAdd( list1 , digits+3 , LIST_NA ) ;
 
-  listPrint( list1 , "list1" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
+    listPrint( list1 , "list1" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
 
-  list2 = createLinkedListFrom( list1 ) ;
+//   list2 = createLinkedListFrom( list1 ) ;
 
-  listAdd   ( list2 , digits+5 , 1       ) ;
-  listAddAll( list2 , list1    , LIST_NA ) ;
+//   listAdd   ( list2 , digits+5 , 1       ) ;
+//   listAddAll( list2 , list1    , LIST_NA ) ;
 
-  listPrint( list2 , "list2" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
+//   listPrint( list2 , "list2" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
 
-  listSort( list2 , (ListElementComparisonFunction) compareInts ) ;
+//   listSort( list2 , (ListElementComparisonFunction) compareInts ) ;
 
-  listPrint( list2 , "list2" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
+//   listPrint( list2 , "list2" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
 
-  list3 = createArrayListFrom( list1 ) ;
+//   list3 = createArrayListFrom( list1 ) ;
 
-  listRemoveElement( list3 , digits+4 ) ;
+//   listRemoveElement( list3 , digits+4 ) ;
 
-  listPrint( list3 , "list3" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
+//   listPrint( list3 , "list3" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
 
-  listRemoveAll( list2 , list3 ) ;
+//   listRemoveAll( list2 , list3 ) ;
 
-  listPrint( list2 , "list2" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
+//   listPrint( list2 , "list2" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
 
-  list4 = createLinkedListFrom( list2 ) ;
+//   list4 = createLinkedListFrom( list2 ) ;
 
-  listReplaceAll( list4 , doubleInt ) ;
+//   listReplaceAll( list4 , doubleInt ) ;
 
-  listPrint( list4 , "list4" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
+//   listPrint( list4 , "list4" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
 
-  printf( "Note that elements 0 and 1 point to the same 'digit', therefore that digit is doubled twice!\n\n" ) ;
+//   printf( "Note that elements 0 and 1 point to the same 'digit', therefore that digit is doubled twice!\n\n" ) ;
 
-  listClear( list1 ) ;
-  listClear( list2 ) ;
+//   listClear( list1 ) ;
+//   listClear( list2 ) ;
 
-  listAddAll( list1 , list3 , LIST_NA ) ;
-  listAddAll( list1 , list4 , 1       ) ;
+//   listAddAll( list1 , list3 , LIST_NA ) ;
+//   listAddAll( list1 , list4 , 1       ) ;
 
-  listAddAll( list2 , list1 , LIST_NA ) ;
-  listAddAll( list2 , list1 , LIST_NA ) ;
-  listAddAll( list2 , list1 , LIST_NA ) ;
+//   listAddAll( list2 , list1 , LIST_NA ) ;
+//   listAddAll( list2 , list1 , LIST_NA ) ;
+//   listAddAll( list2 , list1 , LIST_NA ) ;
 
-  listPrint( list2 , "list2" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
+//   listPrint( list2 , "list2" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
 
-  listDestroy( list1 ) ;
-  listDestroy( list2 ) ;
-  listDestroy( list3 ) ;
-  listDestroy( list4 ) ;
+//   listDestroy( list1 ) ;
+//   listDestroy( list2 ) ;
+//   listDestroy( list3 ) ;
+//   listDestroy( list4 ) ;
 
-  printf( "There should be no memory leaks when the user application destroys all lists.\n\n" ) ;
+//   printf( "There should be no memory leaks when the user application destroys all lists.\n\n" ) ;
 
   /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 

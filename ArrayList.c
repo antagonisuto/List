@@ -49,8 +49,6 @@ static void          alDestroy       ( List list                                
 /***************************************************************************************************************************************************/
 
 
-
-
 /* This is a suggested data structure (you may change it if you wish) ******************************************************************************/
 
 typedef struct arrayList
@@ -97,42 +95,45 @@ static void setFunctionPointers ( List list )
 /***************************************************************************************************************************************************/
 
 
-
-
 /***************************************************************************************************************************************************/
 
 List createArrayList ( int initialCapacity )
 {
-  if (initialCapacity == LIST_NA) {
-    printf("OK2 ");
-    initialCapacity = 10;
-  }
+    if (initialCapacity == LIST_NA) {
+        initialCapacity = 10;
+    }
 
-  if(initialCapacity <= 0){
-    printf("OK1 ");
-    return NULL;
-  }
+    if(initialCapacity <= 0){
+        return NULL;
+    }
 
-  ArrayList* newArrayList = malloc(sizeof(ArrayList));
-  if(newArrayList == NULL) {  return NULL;  }
+    ArrayList *newArrayList = malloc(sizeof(ArrayList));
+    if(newArrayList == NULL) {  
+        return NULL;  
+    }
 
-  //Create the internal data container
-  newArrayList->arraySize = initialCapacity;
-  newArrayList->numberOfElements = 0;
-  newArrayList->array = malloc(initialCapacity * sizeof(int));
+    //Create the internal data container
+    newArrayList->arraySize = initialCapacity;
+    newArrayList->numberOfElements = 0;
+    newArrayList->array = malloc(initialCapacity * sizeof(int));
 
-  printf("OK3 ");
+    if(newArrayList->array == NULL){
+        printf("maybe there");
+        return NULL;
+    }
+    
+
+    //Allocate the List and connect it to the newArrayList
+
+    List lst = malloc(sizeof(struct list));
+  
+    lst->pInternalList = newArrayList;
+    setFunctionPointers(lst);
+  
+    printf("%d \n", initialCapacity);
 
 
-  //Allocate the List and connect it to the newArrayList
-
-  List lst = malloc(sizeof(List));
-  lst->pInternalList = newArrayList;
-  free(newArrayList);
-
-  printf("%d \n", initialCapacity);
-
-  return lst;
+    return lst;
 
 }
 
@@ -140,18 +141,26 @@ List createArrayList ( int initialCapacity )
 
 List createArrayListFrom ( List other )  /* 'other' list can be implemented using linked lists or other underlying data structures */
 {
-  ArrayList* newArrayList = malloc((int) other->size *sizeof(ArrayList));
+    // ArrayList data = IAL(other);
+    // List lst = malloc(sizeof(List));
+    // lst->pInternalList = &data;
 
-  newArrayList->numberOfElements = (int) other->size;
-  newArrayList->array = other->pInternalList;
-  newArrayList->arraySize = (int) other->size;
-
-  return (List) newArrayList;
+  return 0;
 }
 
 /***************************************************************************************************************************************************/
 
+ListBoolean alEnsureCapacity(struct arrayList lst, int minCapacity){
+    if(minCapacity > lst.arraySize){
+        lst.arraySize += (lst.arraySize>>1);
+        if(lst.arraySize < minCapacity){
+            lst.arraySize = minCapacity;
+        }
 
+        lst.array = realloc(lst.array, lst.arraySize * sizeof(lst.array));
+    }
+    return True;
+}
 
 
 /***************************************************************************************************************************************************/
@@ -162,33 +171,43 @@ List createArrayListFrom ( List other )  /* 'other' list can be implemented usin
 
 ListBoolean alAdd ( List list , ListElement element , int index )
 {
-  printf("alADD");
 
-  if(list == NULL){ 
-    printf("alAdd2 ");
-    return False; 
-  }
+    ArrayList *data = &IAL(list);
 
-  if(index < 0 || index > listSize(list)){
-    printf("alAdd3 ");
-    return False;
-  }
-  
-  //ArrayList *data = (ArrayList*)(list->pInternalList);
+    if(index == LIST_NA){
+        alEnsureCapacity(IAL(list), data->numberOfElements+1);
+        data->array[data->numberOfElements] = element;
+        data->numberOfElements++;
+        printf("2nd\n");
+        return True;
+    } 
 
+    if(index < 0 || index > listSize(list)){
+        printf("3rd\n");
+        return False;
+    }
 
-  if(index == LIST_NA){
-    printf("alAdd0 ");
-    list->add(list, element, listSize(list)+1);
-  }
+    // if(data.arraySize < data.arraySize + sizeof(int)){
+    //     data.arraySize += (data.arraySize >> 1);
+    //     if(data.arraySize < data.arraySize + sizeof(int)){
+    //         data.arraySize = data.arraySize + sizeof(int);
+    //     }
 
-  list->add(list, element, index);
+    //     data.array = realloc(data.array, data.arraySize * sizeof(data.array));
+    // }
 
-  printf("alAdd1 ");
+     alEnsureCapacity(IAL(list), data->numberOfElements+1);
+   
+    for(int i = data->numberOfElements; i> index; i--){
+       printf("4th\n");
+       data->array[i] = data->array[i-1];
+    }
 
-  //list->add(list, element, index);
+   data->array[index] = element;
+   data->numberOfElements++;
+   printf("5th\n");
 
-  return True;
+   return True;
 }
 
 /*=================================================================================================================================================*/
@@ -318,9 +337,28 @@ ListElement * alToArray ( List list )
 }
 
 /*=================================================================================================================================================*/
+/* Prints the list (a short header, and then all of the list elements, one element per line, with index of each element printed at the beginning of
+   its line) to the standard output stream (stdout).
+   
+   
+ArrayList  : list1
+Array size : 10
+Elements   : 3
+[0] 4
+[1] 8
+[2] 3
+ */
+
 
 void alPrint ( List list , char * listName , ListElementPrintingFunction print )
 {
+    ArrayList data = IAL(list);
+    printf("ArrayList  : %s\n", listName);
+    printf("Array Size : %d\n", (int)data.arraySize);
+    printf("Elements   : %d\n", data.numberOfElements);
+    for (int i=0; i<data.numberOfElements; i++){
+       printf( "[%d] %d \n" , i ,*(int *)data.array[i]) ;
+    }
 }
 
 /*=================================================================================================================================================*/
