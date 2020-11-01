@@ -133,21 +133,21 @@ List createLinkedList ( void )
 
 List createLinkedListFrom ( List other )  /* 'other' list can be implemented using arrays or other underlying data structures */
 {
-    int digits [] = { 0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 } ;
+    // int digits [] = { 0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 } ;
     
-    List newLinkedList = createLinkedList();
-    ListElement *n =  ((other)->pInternalList);
+    // List newLinkedList = createLinkedList();
+    // //ListElement *n =  ((other)->pInternalList);
 
-    printf("%d \n", listSize(other));
+    // printf("%d \n", listSize(other));
     
-    for(int i = 0; i<listSize(other); i++){
-        llAdd(newLinkedList, n, LIST_NA);
-    }
+    // for(int i = 0; i<listSize(other); i++){
+    //     llAdd(newLinkedList, n, LIST_NA);
+    // }
     
     
 
 
-  return newLinkedList;
+  return NULL;
 }
 
 /***************************************************************************************************************************************************/
@@ -164,8 +164,6 @@ List createLinkedListFrom ( List other )  /* 'other' list can be implemented usi
 ListBoolean llAdd ( List list , ListElement element , int index )
 {
     LinkedList *data = &ILL(list);
-    //Node *nn = malloc(sizeof(struct node));
-
 
     while(data->pTail->next!= NULL){
         data->pTail = data->pTail->next;
@@ -175,7 +173,7 @@ ListBoolean llAdd ( List list , ListElement element , int index )
     newNode->element = element;
     newNode->next = NULL;
 
-    data->pTail = newNode;
+    data->pTail->next = newNode;
 
     data->numberOfElements++;
 
@@ -195,25 +193,22 @@ ListBoolean llAdd ( List list , ListElement element , int index )
 ListBoolean llAddAll ( List list , List other , int index )
 {
     LinkedList *first = &ILL(list);
-    LinkedList *second = &ILL(createLinkedListFrom(other));
+    LinkedList *second = &ILL(other);
 
-    struct node * nn = first->pTail;
-    for(int i = 0; i<first->numberOfElements; i++){
-        nn = nn->next;
+    int count = 1; 
+
+    struct node *curr = first->pTail;
+
+    while( count < index ){
+        curr = curr->next;
+        count++;
     }
 
-    nn = second->pTail;
-    first->pTail = nn;
-    first->numberOfElements += second->numberOfElements;
+    struct node* temp = curr->next;
 
-    //printf("%d, %d", first->numberOfElements,*(int *)nn->element);
+    curr->next = second->pTail;
 
-    //free(nn);
 
-    // for(int i=0; i<listSize(other); i++){
-    //     llAdd(list, second->pTail->element, LIST_NA);
-    //     second->pTail = second->pTail->next;
-    // }
 
   return True;
 }

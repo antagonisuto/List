@@ -66,22 +66,22 @@ int main ( int argc , char * argv[] )
 
   printf( "\n" ) ;
 
-  list1 = createArrayList( LIST_NA ) ;
+//   list1 = createArrayList( LIST_NA ) ;
 
-  listAdd( list1 , digits+4 , LIST_NA ) ;
-  listAdd( list1 , digits+8 , LIST_NA ) ;
-  listAdd( list1 , digits+3 , LIST_NA ) ;
+//   listAdd( list1 , digits+4 , LIST_NA ) ;
+//   listAdd( list1 , digits+8 , LIST_NA ) ;
+//   listAdd( list1 , digits+3 , LIST_NA ) ;
 
-  listPrint( list1 , "list1" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
+//   listPrint( list1 , "list1" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
 
  // list2 = createLinkedListFrom( list1 ) ;
     list2 = createLinkedList();
+    list1 = createLinkedList();
+    //listAdd   ( list1 , digits+6 , LIST_NA      ) ;
 
-
- //
     listAdd   ( list2 , digits+5 , LIST_NA      ) ;
-   listAdd   ( list2 , digits+9 , LIST_NA      ) ;
-  // listAddAll( list2 , list1    , LIST_NA ) ;
+    listAdd   ( list2 , digits+9 , LIST_NA      ) ;
+    listAddAll( list2 , list1    , LIST_NA ) ;
 
  listPrint( list2 , "list2" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
 
