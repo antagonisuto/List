@@ -136,40 +136,42 @@ List createArrayList ( int initialCapacity )
 
 List createArrayListFrom ( List other )  /* 'other' list can be implemented using linked lists or other underlying data structures */
 {
-    // ArrayList data = IAL(other);
-    // List lst = malloc(sizeof(List));
-    // lst->pInternalList = &data;
 
-  return 0;
+    List lst = createArrayList(LIST_NA);
+    ArrayList element = IAL(other);
+    // ArrayList *temp = &IAL(other);
+    // lst->pInternalList = temp;
+    for(int i =0; i<listSize(other); i++){
+        alAdd(lst, element.array[i] , LIST_NA);
+    }
+
+  return lst;
 }
 
 /***************************************************************************************************************************************************/
 
-ListBoolean alEnsureCapacity(struct arrayList lst, int minCapacity){
-    if(minCapacity > lst.arraySize){
-        lst.arraySize += (lst.arraySize>>1);
-        if(lst.arraySize < minCapacity){
-            lst.arraySize = minCapacity;
+ListBoolean alEnsureCapacity(ArrayList *lst, int minCapacity){
+    if(minCapacity > lst->arraySize){
+        lst->arraySize += (lst->arraySize>>1);
+        if(lst->arraySize < minCapacity){
+            lst->arraySize = minCapacity;
         }
 
-        lst.array = realloc(lst.array, lst.arraySize * sizeof(lst.array));
+        lst->array = realloc(lst->array, lst->arraySize * sizeof(lst->array));
     }
     return True;
 }
 
 
 /***************************************************************************************************************************************************/
-/* Inserts the specified element at the specified position in the list. Shifts the element currently at that position (if any) and any subsequent
-   elements to the right (adds one to their indices). If index is LIST_NA, then appends the specified element to the end of the list.
-   Returns True if the operation is successful.
-   Returns False if the operation is unsuccessful; for example if index < 0, or index > listSize(list), or running out of memory. */
+
 //DONE
 ListBoolean alAdd ( List list , ListElement element , int index )
 {
     ArrayList *data = &IAL(list);
 
     if(index == LIST_NA){
-        alEnsureCapacity(IAL(list), data->numberOfElements+1);
+        alEnsureCapacity(&IAL(list), data->numberOfElements+1);
         data->array[data->numberOfElements] = element;
         data->numberOfElements++;
         return True;
@@ -179,7 +181,7 @@ ListBoolean alAdd ( List list , ListElement element , int index )
         return False;
     }
 
-     alEnsureCapacity(IAL(list), data->numberOfElements+1);
+    alEnsureCapacity(&IAL(list), data->numberOfElements+1);
    
     for(int i = data->numberOfElements; i> index; i--){
        data->array[i] = data->array[i-1];
@@ -195,84 +197,215 @@ ListBoolean alAdd ( List list , ListElement element , int index )
 
 ListBoolean alAddAll ( List list , List other , int index )
 {
-  return False;
+    ArrayList *second = &IAL(other);
+    ArrayList *first = &IAL(list);
+    if(index == LIST_NA){
+        index = listSize(list);
+    }
+
+    if(first->arraySize < second->arraySize + first->arraySize){
+        alEnsureCapacity(first, first->numberOfElements + second->numberOfElements);
+    }
+
+    for(int i=0; i<second->numberOfElements; i++){
+        first->array[index+i] = second->array[i]; 
+    }
+
+    first->numberOfElements += second->numberOfElements;
+
+  return True;
 }
 
 /*=================================================================================================================================================*/
 
 void alClear ( List list )
 {
-
+    ArrayList *data = &IAL(list);
+    free(data->array);
+    data->array = malloc(0);
+    data->arraySize = 0;
+    data->numberOfElements = 0;
 }
 
 /*=================================================================================================================================================*/
-
+/* Returns True if the list contains the specified element. More formally, returns True if and only if the list contains at least one element 'e'
+   such that the pointer comparison ( element == e ) is true. Otherwise, returns False. */
 ListBoolean alContains ( List list , ListElement element )
 {
+    if(listSize(list) == 0){
+        return False;
+    }
+    ArrayList *data = &IAL(list);
+
+    for(int i=0; i<data->numberOfElements; i++){
+        if(data->array[i] == element){
+            return True;
+        }
+    }
+    
   return False;
 }
 
 /*=================================================================================================================================================*/
-
+/* Returns True if the list contains all of the elements of the other list. Otherwise, returns False. */
 ListBoolean alContainsAll ( List list , List other )
 {
-  return False;
+    ArrayList *data = &IAL(list);
+    ArrayList *ret = &IAL(other);
+
+
+    for(int i=0; i<data->numberOfElements; i++){
+        ListBoolean check = False;
+        for(int j=0; j<ret->numberOfElements; j++){
+            if(data->array[i] == ret->array[j]){
+                check = True;
+                continue;
+            }
+        }
+        if(check==False){
+            return False;
+        }
+    }
+
+    return True;
 }
 
 /*=================================================================================================================================================*/
-
+/* Compares the other list with the list for equality. More formally, returns True if and only if the pointer comparison ( list == other ) is true.
+   Otherwise, returns False. */
 ListBoolean alEquals ( List list , List other )
 {
-  return False;
+    if(listSize(list)!=listSize(other)){
+        return False;
+    }
+
+    ArrayList *data = &IAL(list);
+    ArrayList *oth = &IAL(other);
+
+    for(int i=0; i<data->numberOfElements; i++){
+        if(data->array[i] != oth->array[i]){
+            return False;
+        }
+    }
+  return True;
 }
 
 /*=================================================================================================================================================*/
 
 ListElement alGet ( List list , int index )
 {
-  return 0;
+    if(index < 0 || index >= listSize(list)){
+        return NULL;
+    }
+    ArrayList *data = &IAL(list);
+  return data->array[index];
 }
 
 /*=================================================================================================================================================*/
 
 int alIndexOf ( List list , ListElement element )
 {
-  return 0;
+    ArrayList *data = &IAL(list);
+
+    for(int i=0; i<data->numberOfElements; i++){
+        if(data->array[i]==element){
+            return i;
+        }
+    }
+
+    return 0;
 }
 
 /*=================================================================================================================================================*/
 
 ListBoolean alIsEmpty ( List list )
-{
-  return False;
+{    
+    return listSize(list)==0;
 }
 
 /*=================================================================================================================================================*/
 
 int alLastIndexOf ( List list , ListElement element )
 {
-  return False;
+    ArrayList *data = &IAL(list);
+    int el = 0;
+    for(int i=0; i<data->numberOfElements; i++){
+        if(data->array[i]==element){
+            el = i;
+        }
+    }
+
+    if(el == 0){
+        return -1;
+    }
+
+  return el;
 }
 
 /*=================================================================================================================================================*/
 
 ListElement alRemove ( List list , int index )
 {
-  return 0;
+    if(index < 0 || index >= listSize(list)){
+        return NULL;
+    }
+
+    ArrayList *data = &IAL(list);
+    ListElement element = data->array[index];
+    for(int i=index; i<data->numberOfElements - 1; i++){
+        data->array[i] = data->array[i+1];
+    }
+    data->numberOfElements--;
+
+
+  return element;
 }
 
 /*=================================================================================================================================================*/
-
+//DONE
 ListBoolean alRemoveElement ( List list , ListElement element )
 {
-  return False;
+    ArrayList *data = &IAL(list);
+    ListBoolean check = False;
+    for (int i=0; i<data->numberOfElements; i++){
+        if(data->array[i]==element){
+            data->array[i] = data->array[i+1];
+            check = True;
+            data->numberOfElements--;
+        } 
+        if(check == True){
+            data->array[i] = data->array[i+1];
+        }
+    }
+  return True;
 }
 
 /*=================================================================================================================================================*/
 
 ListBoolean alRemoveAll ( List list , List other )
 {
-  return False;
+    ArrayList *data = &IAL(list);
+    ArrayList *ret = &IAL(other);
+    ArrayList *temp = malloc(sizeof(ArrayList));
+    temp->array = malloc(sizeof(ListElement));
+
+    int index = 0; 
+    for(int i=0; i<data->numberOfElements; i++){
+        ListBoolean check = False;
+        for(int j=0; j<ret->numberOfElements; j++){
+            if(*(int *)data->array[i] == *(int *)ret->array[j]){
+                check = True;
+            }
+        }
+        if(check == False){
+            temp->array[index] = data->array[i];
+            index++;
+        }
+    }
+
+    data->array = temp->array;
+    data->numberOfElements = index;
+    return True;
 }
 
 /*=================================================================================================================================================*/
@@ -286,14 +419,43 @@ void alReplaceAll ( List list , ListElementUnaryOperator uOperator )
 
 ListBoolean alRetainAll ( List list , List other )
 {
-  return False;
+    ArrayList *data = &IAL(list);
+    ArrayList *ret = &IAL(other);
+    ArrayList *temp = malloc(sizeof(ArrayList));
+    temp->array = malloc(sizeof(ListElement));
+
+    int index = 0; 
+    for(int i=0; i<data->numberOfElements; i++){
+        for(int j=0; j<ret->numberOfElements; j++){
+            if(*(int *)data->array[i] == *(int *)ret->array[j]){
+                temp->array[index] = data->array[i];
+                index++;
+                continue;
+            }
+        }
+    }
+
+    data->array = temp->array;
+    data->numberOfElements = index;
+    return True;
 }
 
 /*=================================================================================================================================================*/
+/* Replaces the element at the specified position in the list with the specified element.
+   Returns the element previously at the specified position.
+   Returns NULL if index < 0, or index >= listSize(list).
+   Note: NULL is also a valid element value that can be stored in a list. */
 
 ListElement alSet ( List list , int index , ListElement element )
 {
-  return 0;
+    if(index <0 || index >= listSize(list)){
+        return NULL;
+    }
+
+    ArrayList *data = &IAL(list);
+    data->array[index] = element;
+
+    return 0;
 }
 
 /*=================================================================================================================================================*/
@@ -311,28 +473,44 @@ int alSize ( List list )
 
 ListBoolean alSort ( List list , ListElementComparisonFunction compare )
 {
-  return False;
+    ArrayList *data = &IAL(list);
+    int n = data->numberOfElements;
+
+    for(int i=0; i < n - 1; i++){
+        for(int j = 0; j < n - i - 1; j++){
+            if(*(int *)data->array[j] > *(int *)data->array[j + 1]){
+                ListElement swap = data->array[j];
+                data->array[j] = data->array[j+1];
+                data->array[j+1] = swap;
+            }
+
+        }
+    }
+
+  return True;
 }
 
 /*=================================================================================================================================================*/
+/* Returns an array containing all of the elements in the list in proper sequence (from first to last element).
+   The returned array will be 'safe' in that no references to it are maintained by the list (in other words, this method must allocate a new array
+   even if the list is backed by an array). The caller is thus free to modify the returned array. This method acts as bridge between array-based and
+   list-based APIs.
+   Returns NULL if the list does not contain any elements, or if running out of memory. */
 
 ListElement * alToArray ( List list )
 {
-  return 0;
+    if(listSize(list) == 0) return NULL;
+
+    ArrayList data = IAL(list);
+    ListElement *element = malloc(sizeof(int));
+    for(int i = 0; i<data.numberOfElements; i++){
+        element[i] = data.array[i];
+    }
+
+  return element;
 }
 
 /*=================================================================================================================================================*/
-/* Prints the list (a short header, and then all of the list elements, one element per line, with index of each element printed at the beginning of
-   its line) to the standard output stream (stdout).
-   
-   
-ArrayList  : list1
-Array size : 10
-Elements   : 3
-[0] 4
-[1] 8
-[2] 3
- */
 
 
 void alPrint ( List list , char * listName , ListElementPrintingFunction print )
@@ -343,6 +521,7 @@ void alPrint ( List list , char * listName , ListElementPrintingFunction print )
     printf("Elements   : %d\n", data.numberOfElements);
     for (int i=0; i<data.numberOfElements; i++){
        printf( "[%d] %d \n" , i ,*(int *)data.array[i]) ;
+       //print(data.array[i]);
     }
 }
 
@@ -350,6 +529,12 @@ void alPrint ( List list , char * listName , ListElementPrintingFunction print )
 
 void alDestroy ( List list )
 {
+    ArrayList *data = &IAL(list);
+
+    free(data->array);
+    data->arraySize = 0;
+    data->numberOfElements = 0;
+
 }
 
 /***************************************************************************************************************************************************/

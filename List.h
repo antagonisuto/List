@@ -68,7 +68,7 @@ typedef int (* ListElementComparisonFunction) ( const ListElement , const ListEl
    elements to the right (adds one to their indices). If index is LIST_NA, then appends the specified element to the end of the list.
    Returns True if the operation is successful.
    Returns False if the operation is unsuccessful; for example if index < 0, or index > listSize(list), or running out of memory. */
-
+//ARRAYLIST OK
 ListBoolean listAdd ( List list , ListElement element , int index ) ;
 
 /* Inserts all of the elements in the other list into the list at the specified position. Shifts the element currently at that position (if any) and
@@ -79,44 +79,52 @@ ListBoolean listAdd ( List list , ListElement element , int index ) ;
    Returns True if the list is changed as a result of the call.
    Returns False if the list is unchanged and/or if the operation is unsuccessful. */
 
+//ARRAYLIST OK
 ListBoolean listAddAll ( List list , List other , int index ) ;
 
 /* Removes all of the elements from the list. The list will be empty after this call returns. */
-
+//ARRAYLIST OK
 void listClear ( List list ) ;
 
 /* Returns True if the list contains the specified element. More formally, returns True if and only if the list contains at least one element 'e'
    such that the pointer comparison ( element == e ) is true. Otherwise, returns False. */
 
+//ARRAYLIST OK
 ListBoolean listContains ( List list , ListElement element ) ;
 
 /* Returns True if the list contains all of the elements of the other list. Otherwise, returns False. */
 
+//ARRAYLIST OK
 ListBoolean listContainsAll ( List list , List other ) ;
 
 /* Compares the other list with the list for equality. More formally, returns True if and only if the pointer comparison ( list == other ) is true.
    Otherwise, returns False. */
 
+//ARRAYLIST OK
 ListBoolean listEquals ( List list , List other ) ;
 
 /* Returns the element at the specified position in the list (indices start from 0).
    Returns NULL if index < 0, or index >= listSize(list).
    Note: NULL is also a valid element value that can be stored in a list. */
 
+//ARRAYLIST OK
 ListElement listGet ( List list , int index ) ;
 
 /* Returns the index of the first occurrence of the specified element in the list, or -1 if the list does not contain the element. More formally,
    returns the lowest index i such that ( element == listGet(list,i) ), or -1 if there is no such index. */
 
+//ARRAYLIST OK
 int listIndexOf ( List list , ListElement element ) ;
 
 /* Returns True if the list contains no elements. Otherwise, returns False. */
 
+//ARRAYLIST OK
 ListBoolean listIsEmpty ( List list ) ;
 
 /* Returns the index of the last occurrence of the specified element in the list, or -1 if the list does not contain the element. More formally,
    returns the highest index i such that ( element == listGet(list,i) ), or -1 if there is no such index. */
 
+//ARRAYLIST OK
 int listLastIndexOf ( List list , ListElement element ) ;
 
 /* Removes the element at the specified position in the list. Shifts any subsequent elements to the left (subtracts one from their indices).
@@ -124,6 +132,7 @@ int listLastIndexOf ( List list , ListElement element ) ;
    Returns NULL if index < 0, or index >= listSize(list).
    Note: NULL is also a valid element value that can be stored in a list. */
 
+//ARRAYLIST OK
 ListElement listRemove ( List list , int index ) ;
 
 /* Removes the first occurrence of the specified element from the list, if it is present. If the list does not contain the element, it is unchanged.
@@ -131,11 +140,13 @@ ListElement listRemove ( List list , int index ) ;
    Returns True if the list contained the specified element (or equivalently, if the list changed as a result of the call).
    Otherwise, returns False. */
 
+//ARRAYLIST OK
 ListBoolean listRemoveElement ( List list , ListElement element ) ;
 
 /* Removes from the list all of its elements that are contained in the other list.
    Returns True if the list changed as a result of the call. Otherwise, returns False. */
 
+//ARRAYLIST OK
 ListBoolean listRemoveAll ( List list , List other ) ;
 
 /* Replaces each element of the list with the result of applying the unary operator to that element. */
@@ -146,6 +157,7 @@ void listReplaceAll ( List list , ListElementUnaryOperator uOperator ) ;
    contained in the other list.
    Returns True if the list changed as a result of the call. Otherwise, returns False. */
 
+//ARRAYLIST OK
 ListBoolean listRetainAll ( List list , List other ) ;
 
 /* Replaces the element at the specified position in the list with the specified element.
@@ -153,10 +165,12 @@ ListBoolean listRetainAll ( List list , List other ) ;
    Returns NULL if index < 0, or index >= listSize(list).
    Note: NULL is also a valid element value that can be stored in a list. */
 
+//ARRAYLIST OK
 ListElement listSet ( List list , int index , ListElement element ) ;
 
 /* Returns the number of elements in the list. If the list contains more than INT_MAX elements, returns INT_MAX. */
 
+//ARRAYLIST OK
 int listSize ( List list ) ;
 
 /* Sorts the list according to the order induced by the specified comparison function.
@@ -167,6 +181,7 @@ int listSize ( List list ) ;
    Returns True if successful (if list is in sorted order when function returns).
    Returns False if cannot sort the list due to running out of memory. */
 
+//ARRAYLIST OK
 ListBoolean listSort ( List list , ListElementComparisonFunction compare ) ;
 
 /* Returns an array containing all of the elements in the list in proper sequence (from first to last element).
@@ -180,10 +195,12 @@ ListElement * listToArray ( List list ) ;
 /* Prints the list (a short header, and then all of the list elements, one element per line, with index of each element printed at the beginning of
    its line) to the standard output stream (stdout). */
 
+//ARRAYLIST OK
 void listPrint ( List list , char * listName , ListElementPrintingFunction print ) ;
 
 /* Destroys the list and frees up its memory. */
 
+//ARRAYLIST OK
 void listDestroy ( List list ) ;
 
 /***************************************************************************************************************************************************/

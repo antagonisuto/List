@@ -65,7 +65,7 @@ Node ;
 typedef struct linkedList
 {
   int    numberOfElements ;
-  Node * pHead            ;
+  //Node * pHead            ;
   Node * pTail            ;
 }
 LinkedList ;
@@ -106,42 +106,38 @@ static void setFunctionPointers ( List list )
 
 
 
-/* Constructs an empty list.
-   Returns the created list, or NULL if running out of memory. 
-   
-   
-typedef struct node
-{
-  ListElement   element ;
-  struct node * next    ;
-}
-Node ;
-
-typedef struct linkedList
-{
-  int    numberOfElements ;
-  Node * pHead            ;
-  Node * pTail            ;
-}
-LinkedList ;*/
-
 /***************************************************************************************************************************************************/
 
 List createLinkedList ( void )
 {
     LinkedList *newLinkedList = malloc(sizeof(LinkedList));
-    if(newLinkedList == NULL){
-        return NULL;
-    }
+    // if(newLinkedList == NULL){
+    //     return NULL;
+    // }
 
-    newLinkedList->numberOfElements = 0;
-    newLinkedList->pHead = malloc(sizeof(struct node));
+
     newLinkedList->pTail = malloc(sizeof(struct node));
+    newLinkedList->numberOfElements = 0;
+    newLinkedList->pTail->next = malloc(sizeof(struct node));
+    newLinkedList->pTail->element = NULL;
 
-    if(newLinkedList->pTail || newLinkedList->pHead){
+
+
+    // node temp; // declare a node
+    // temp = (node)malloc(sizeof(struct LinkedList)); // allocate memory using malloc()
+    // temp->next = NULL;// make next point to NULL
+    // return temp;//return the new node
+
+    // newLinkedList->numberOfElements = 0;
+    // //newLinkedList->pHead = malloc(sizeof(struct node));
+    // newLinkedList->pTail = malloc(sizeof(struct node));
+    // newLinkedList->pTail->next = malloc(sizeof(struct node));
+
+    if(newLinkedList->pTail == NULL || newLinkedList->pTail->next == NULL){
         return NULL;
     }
-
+    
+    
     List lst = malloc(sizeof(struct list));
     lst->pInternalList = newLinkedList;
     setFunctionPointers(lst);
@@ -153,11 +149,42 @@ List createLinkedList ( void )
 
 List createLinkedListFrom ( List other )  /* 'other' list can be implemented using arrays or other underlying data structures */
 {
+    int digits [] = { 0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 } ;
+    
+    List newLinkedList = createLinkedList();
+    ListElement *n = other->pInternalList;
 
-    List data = createLinkedList();
-    data = other;
+    //ListElement data = other->pInternalList;
+    
+    //ll->numberOfElements = listSize(other);
+    printf("%d \n", *(int *) n +1);
 
-  return data;
+    for(int i = 0; i<listSize(other); i++){
+        llAdd(newLinkedList, n+1, LIST_NA);
+
+    }
+
+    //llAdd(newLinkedList, digits, LIST_NA);
+    //llAdd(newLinkedList, e, LIST_NA);
+
+
+    //newLinkedList->pHead = malloc(sizeof(struct node));
+    //newLinkedList->pTail = malloc(sizeof(struct node));
+
+    //newLinkedList = other;
+    //newLinkedList->pTail = data->pTail;
+    //newLinkedList->pTail->next = data->pTail;
+    
+    //struct Node *n = malloc(sizeof(Node));
+
+    // for(int i=0; i<data->numberOfElements; i++){
+    //     n = data->pTail;
+    //     newLinkedList->pTail = newLinkedList->pTail->next;
+    // }
+
+
+
+  return newLinkedList;
 }
 
 /***************************************************************************************************************************************************/
@@ -173,64 +200,62 @@ List createLinkedListFrom ( List other )  /* 'other' list can be implemented usi
 
 ListBoolean llAdd ( List list , ListElement element , int index )
 {
-
     LinkedList *data = &ILL(list);
-    if(data == NULL){
+
+    
+    struct node *temp, *p;
+    p = malloc(sizeof(struct node));
+    temp = malloc(sizeof(struct node));
+
+    p = data->pTail;
+
+    for(int i=0; i<listSize(list); i++){
+        p = p->next;
+    }
+    temp->element = element;
+    data->pTail = temp;
+    data->numberOfElements += 1;
+
+    if(index<0 || index > listSize(list)){
         return False;
     }
     
-    struct node *newNode = malloc(sizeof(struct node));
-    //newNode->next = malloc(sizeof(struct node));
-    newNode->element = element;
-    printf("%d", *(int *)newNode->element);
-
-    struct node *curr = malloc(sizeof(struct node));
-
-    if(index == LIST_NA){
-        curr = data->pTail;
-
-        while(curr->next!=NULL){
-            curr = curr->next;
-        }
-
-        struct node *temp = curr->next;
-        curr->next = newNode;
-        newNode->next = temp;
-        
-        data->pTail = curr;
-        data->numberOfElements++;
-        free(temp);
-        free(curr);
-        return True;
-    }
-
-    if(index < 0 || index > listSize(list)){
-        return False;
-    }
-
-    curr = data->pTail;
-
-    for(int i = 0; i<index; i++){
-        curr = curr->next;
-    }
-
-    struct node *temp = curr->next;
-    curr->next = newNode;
-    newNode->next = temp;
-
-    data->pTail = curr;
-    data->numberOfElements++;
-    free(temp);
-    free(curr);
-
     return True;
 }
 
 /*=================================================================================================================================================*/
+/* Inserts all of the elements in the other list into the list at the specified position. Shifts the element currently at that position (if any) and
+   any subsequent elements to the right (increases their indices). If index is LIST_NA, then appends all of the elements in the other list to the end
+   of the list. The new elements will appear in the list in the order that they are stored in the other list. The behavior of this operation is
+   undefined if the other list is modified while the operation is in progress (note that this will occur if the other list is the same as the list,
+   and it is nonempty).
+   Returns True if the list is changed as a result of the call.
+   Returns False if the list is unchanged and/or if the operation is unsuccessful. */
 
 ListBoolean llAddAll ( List list , List other , int index )
 {
-  return False;
+    LinkedList *first = &ILL(list);
+    LinkedList *second = &ILL(createLinkedListFrom(other));
+
+    struct node * nn = first->pTail;
+    for(int i = 0; i<first->numberOfElements; i++){
+        nn = nn->next;
+    }
+
+    nn = second->pTail;
+    first->pTail = nn;
+    first->numberOfElements += second->numberOfElements;
+
+    //printf("%d, %d", first->numberOfElements,*(int *)nn->element);
+
+    //free(nn);
+
+    // for(int i=0; i<listSize(other); i++){
+    //     llAdd(list, second->pTail->element, LIST_NA);
+    //     second->pTail = second->pTail->next;
+    // }
+
+  return True;
 }
 
 /*=================================================================================================================================================*/
@@ -336,7 +361,10 @@ int llSize ( List list )
 {
     LinkedList *data = &ILL(list);
 
-    int size = data->numberOfElements;
+    int size = 0;
+    while(data->pTail!= NULL){
+        size++;
+    }
 
     return size;
 }
@@ -359,13 +387,18 @@ ListElement * llToArray ( List list )
 
 void llPrint ( List list , char * listName , ListElementPrintingFunction print )
 {
-    LinkedList data = ILL(list);
+    LinkedList *data = &ILL(list);
 
     printf("LinkedList  : %s\n", listName);
-    printf("Elements    : %d\n", data.numberOfElements);
-    for(int i = 0; i<data.numberOfElements; i++){
-        printf("[%d] %d \n", i, *(int *) data.pTail->element);
+    printf("Elements    : %d\n", data->numberOfElements);
+    for(int i = 0; i<data->numberOfElements; i++){
+        printf("[%d] %d \n", i, *(int *) data->pTail->element);
+        data->pTail = data->pTail->next;
     }
+    // while(data->pTail != NULL){
+    //     printf("[%d] \n", *(int *) data->pTail->element);
+    //     data->pTail = data->pTail->next;
+    // }
 }
 
 /*=================================================================================================================================================*/

@@ -24,7 +24,6 @@
 /*-------------------------------------------------------------------------------------------------------------------------------------------------*/
 
 #include <stdio.h>
-#include <stdlib.h>
 
 /***************************************************************************************************************************************************/
 
@@ -61,29 +60,29 @@ int main ( int argc , char * argv[] )
 {
   /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 
-    List list3 , list4 ;    /* Local lists */
+  List list3 , list4 ;    /* Local lists */
 
   /*-----------------------------------------------------------------------------------------------------------------------------------------------*/
 
-    printf( "\n" ) ;
+  printf( "\n" ) ;
 
-    list1 = createArrayList( LIST_NA ) ;
+  list1 = createArrayList( LIST_NA ) ;
 
-    listAdd( list1 , digits+4 , 0 ) ;
-    listAdd( list1 , digits+8 , LIST_NA ) ;
-    listAdd( list1 , digits+3 , LIST_NA ) ;
-    
-    listPrint( list1 , "list1" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
+  listAdd( list1 , digits+4 , LIST_NA ) ;
+  listAdd( list1 , digits+8 , LIST_NA ) ;
+  listAdd( list1 , digits+3 , LIST_NA ) ;
 
-    //printf("%d \n", listSize(list1));
+  listPrint( list1 , "list1" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
 
-    list2 = createLinkedListFrom( list1 ) ;
+   list2 = createLinkedListFrom( list1 ) ;
+  //list2 = createLinkedList();
 
-  listAdd   ( list2 , digits+5 , 1 ) ;
-    //listAdd   ( list2 , digits+6 , 2  ) ;
-//   listAddAll( list2 , list1    , LIST_NA ) ;
 
-  listPrint( list2 , "list2" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
+ listAdd   ( list2 , digits+5 , LIST_NA      ) ;
+   listAdd   ( list2 , digits+9 , LIST_NA      ) ;
+  // listAddAll( list2 , list1    , LIST_NA ) ;
+
+    listPrint( list2 , "list2" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
 
 //   listSort( list2 , (ListElementComparisonFunction) compareInts ) ;
 
