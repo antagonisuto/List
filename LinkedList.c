@@ -163,38 +163,21 @@ List createLinkedListFrom ( List other )  /* 'other' list can be implemented usi
 
 ListBoolean llAdd ( List list , ListElement element , int index )
 {
-    if(index != LIST_NA){
-        if(index<0 || index > listSize(list)){
-            return False;
-        }
-    }
-
     LinkedList *data = &ILL(list);
+    //Node *nn = malloc(sizeof(struct node));
 
-    struct node *temp, *p;
-    p = malloc(sizeof(struct node));
-    temp = malloc(sizeof(struct node));
 
-    //p = data->pTail;
-    printf("%d \n", listSize(list));
-
-    if(data->pTail->next == NULL){
-        data->pTail = temp;
-    } else {
-        if(data->pTail->next->next ==NULL){
-            data->pTail->next = temp;
-        }else{
-            while(p->next != NULL){
-                p = p->next;
-            }
-
-            p->next = temp;
-        }
+    while(data->pTail->next!= NULL){
+        data->pTail = data->pTail->next;
     }
-    temp->element = element;
-    data->pTail = temp;
-    data->numberOfElements += 1;
 
+    Node *newNode = malloc(sizeof(struct node));
+    newNode->element = element;
+    newNode->next = NULL;
+
+    data->pTail = newNode;
+
+    data->numberOfElements++;
 
     
     return True;

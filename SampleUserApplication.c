@@ -80,7 +80,7 @@ int main ( int argc , char * argv[] )
 
  //
     listAdd   ( list2 , digits+5 , LIST_NA      ) ;
-   //listAdd   ( list2 , digits+9 , LIST_NA      ) ;
+   listAdd   ( list2 , digits+9 , LIST_NA      ) ;
   // listAddAll( list2 , list1    , LIST_NA ) ;
 
  listPrint( list2 , "list2" , (ListElementPrintingFunction) printInt ) ;    printf( "\n" ) ;
