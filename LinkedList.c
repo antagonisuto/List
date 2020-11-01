@@ -111,27 +111,11 @@ static void setFunctionPointers ( List list )
 List createLinkedList ( void )
 {
     LinkedList *newLinkedList = malloc(sizeof(LinkedList));
-    // if(newLinkedList == NULL){
-    //     return NULL;
-    // }
-
 
     newLinkedList->pTail = malloc(sizeof(struct node));
     newLinkedList->numberOfElements = 0;
     newLinkedList->pTail->next = malloc(sizeof(struct node));
     newLinkedList->pTail->element = NULL;
-
-
-
-    // node temp; // declare a node
-    // temp = (node)malloc(sizeof(struct LinkedList)); // allocate memory using malloc()
-    // temp->next = NULL;// make next point to NULL
-    // return temp;//return the new node
-
-    // newLinkedList->numberOfElements = 0;
-    // //newLinkedList->pHead = malloc(sizeof(struct node));
-    // newLinkedList->pTail = malloc(sizeof(struct node));
-    // newLinkedList->pTail->next = malloc(sizeof(struct node));
 
     if(newLinkedList->pTail == NULL || newLinkedList->pTail->next == NULL){
         return NULL;
@@ -152,36 +136,15 @@ List createLinkedListFrom ( List other )  /* 'other' list can be implemented usi
     int digits [] = { 0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 } ;
     
     List newLinkedList = createLinkedList();
-    ListElement *n = other->pInternalList;
+    ListElement *n =  ((other)->pInternalList);
 
-    //ListElement data = other->pInternalList;
+    printf("%d \n", listSize(other));
     
-    //ll->numberOfElements = listSize(other);
-    printf("%d \n", *(int *) n +1);
-
     for(int i = 0; i<listSize(other); i++){
-        llAdd(newLinkedList, n+1, LIST_NA);
-
+        llAdd(newLinkedList, n, LIST_NA);
     }
-
-    //llAdd(newLinkedList, digits, LIST_NA);
-    //llAdd(newLinkedList, e, LIST_NA);
-
-
-    //newLinkedList->pHead = malloc(sizeof(struct node));
-    //newLinkedList->pTail = malloc(sizeof(struct node));
-
-    //newLinkedList = other;
-    //newLinkedList->pTail = data->pTail;
-    //newLinkedList->pTail->next = data->pTail;
     
-    //struct Node *n = malloc(sizeof(Node));
-
-    // for(int i=0; i<data->numberOfElements; i++){
-    //     n = data->pTail;
-    //     newLinkedList->pTail = newLinkedList->pTail->next;
-    // }
-
+    
 
 
   return newLinkedList;
@@ -200,25 +163,39 @@ List createLinkedListFrom ( List other )  /* 'other' list can be implemented usi
 
 ListBoolean llAdd ( List list , ListElement element , int index )
 {
+    if(index != LIST_NA){
+        if(index<0 || index > listSize(list)){
+            return False;
+        }
+    }
+
     LinkedList *data = &ILL(list);
 
-    
     struct node *temp, *p;
     p = malloc(sizeof(struct node));
     temp = malloc(sizeof(struct node));
 
-    p = data->pTail;
+    //p = data->pTail;
+    printf("%d \n", listSize(list));
 
-    for(int i=0; i<listSize(list); i++){
-        p = p->next;
+    if(data->pTail->next == NULL){
+        data->pTail = temp;
+    } else {
+        if(data->pTail->next->next ==NULL){
+            data->pTail->next = temp;
+        }else{
+            while(p->next != NULL){
+                p = p->next;
+            }
+
+            p->next = temp;
+        }
     }
     temp->element = element;
     data->pTail = temp;
     data->numberOfElements += 1;
 
-    if(index<0 || index > listSize(list)){
-        return False;
-    }
+
     
     return True;
 }
